@@ -179,9 +179,9 @@ class TestDAGConfiguration:
         monitoring_dag_instance = monitoring_dag()
         
         # Vérifications
-        assert etl_dag.schedule == '@daily'
-        assert quality_dag.schedule == '@daily'
-        assert monitoring_dag_instance.schedule == '@hourly'
+        assert etl_dag.schedule_interval == '@daily'
+        assert quality_dag.schedule_interval == '@daily'
+        assert monitoring_dag_instance.schedule_interval == '@hourly'
     
     def test_catchup_settings(self):
         """Test des paramètres catchup"""
