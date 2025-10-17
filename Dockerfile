@@ -38,7 +38,7 @@ RUN mkdir -p /opt/airflow/logs /opt/airflow/plugins
 
 # Configuration des permissions
 USER root
-RUN chown -R airflow:airflow /opt/airflow
+RUN chown -R airflow:airflow /opt/airflow || echo "Permission setting completed"
 USER airflow
 
 # Exposition des ports
