@@ -1,0 +1,17 @@
+order_reference,customer_email,product_id,quantity,unit_price,order_date,status,payment_method
+ORD-2024-001,john.doe@email.com,1,2,29.99,2024-01-15 10:30:00,completed,credit_card
+ORD-2024-002,jane.smith@email.com,5,1,695.00,2024-01-15 11:45:00,completed,paypal
+ORD-2024-003,bob.wilson@email.com,3,3,55.99,2024-01-15 14:20:00,pending,credit_card
+ORD-2024-004,john.doe@email.com,7,1,9.99,2024-01-16 09:15:00,completed,credit_card
+ORD-2024-005,alice.brown@email.com,2,1,22.30,2024-01-16 13:00:00,completed,debit_card
+ORD-2024-006,jane.smith@email.com,10,2,108.00,2024-01-16 16:30:00,completed,paypal
+ORD-2024-007,charlie.davis@email.com,4,1,15.99,2024-01-17 10:00:00,cancelled,credit_card
+ORD-2024-008,bob.wilson@email.com,8,2,10.99,2024-01-17 11:30:00,completed,debit_card
+ORD-2024-009,alice.brown@email.com,6,1,168.00,2024-01-17 14:45:00,completed,credit_card
+ORD-2024-010,david.miller@email.com,3,2,55.99,2024-01-18 09:30:00,completed,paypal
+ORD-2024-011,john.doe@email.com,9,1,64.00,2024-01-18 12:00:00,pending,credit_card
+ORD-2024-012,emma.wilson@email.com,1,1,29.99,2024-01-18 15:20:00,completed,debit_card
+ORD-2024-013,frank.taylor@email.com,5,1,695.00,2024-01-19 10:45:00,completed,credit_card
+ORD-2024-014,jane.smith@email.com,2,3,22.30,2024-01-19 13:15:00,completed,paypal
+ORD-2024-015,bob.wilson@email.com,7,2,9.99,2024-01-19 16:00:00,refunded,credit_card
+

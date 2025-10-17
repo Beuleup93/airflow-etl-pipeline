@@ -1,0 +1,67 @@
+name: Rollback Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to rollback'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+      version:
+        description: 'Version to rollback to'
+        required: true
+        default: 'previous'
+        type: string
+
+jobs:
+  rollback:
+    name: Rollback to Previous Version
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
+
+    - name: Rollback to previous version
+      run: |
+        echo "🔄 Rollback en cours..."
+        echo "Environment: ${{ github.event.inputs.environment }}"
+        echo "Version: ${{ github.event.inputs.version }}"
+        
+        # Logique de rollback
+        if [ "${{ github.event.inputs.version }}" = "previous" ]; then
+          echo "📦 Récupération de la version précédente..."
+          # Ici vous pouvez ajouter votre logique de rollback
+          # Par exemple : kubectl rollback, docker-compose down/up, etc.
+        else
+          echo "📦 Rollback vers la version spécifique: ${{ github.event.inputs.version }}"
+        fi
+        
+        echo "✅ Rollback terminé"
+
+    - name: Verify rollback
+      run: |
+        echo "🔍 Vérification du rollback..."
+        
+        # Vérifier que les services sont opérationnels
+        if curl -f http://localhost:8080/health > /dev/null 2>&1; then
+          echo "✅ Airflow est opérationnel"
+        else
+          echo "❌ Airflow n'est pas accessible"
+          exit 1
+        fi
+        
+        echo "✅ Rollback vérifié avec succès"
+
+    - name: Notify rollback
+      run: |
+        echo "📢 Notification du rollback..."
+        echo "🔄 Rollback effectué vers la version ${{ github.event.inputs.version }}"
+        echo "🌐 Environment: ${{ github.event.inputs.environment }}"

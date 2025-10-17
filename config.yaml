@@ -1,0 +1,62 @@
+# Configuration du projet Airflow ETL
+# Fichier de configuration centralisé
+
+# Configuration de la base de données
+# Les valeurs sensibles sont surchargées par les variables d'environnement
+database:
+  host: "postgres"  # Surchargé par DB_HOST (nom du service Docker)
+  port: 5432         # Surchargé par DB_PORT
+  database: "ecommerce_db"  # Surchargé par DB_NAME
+  user: "postgres"   # Surchargé par DB_USER
+  password: "postgres"  # Surchargé par DB_PASSWORD
+
+# Chemins des données
+data_paths:
+  raw_data_dir: "/usr/local/airflow/data/raw"
+  orders_csv: "/usr/local/airflow/data/raw/orders.csv"
+  sessions_json: "/usr/local/airflow/data/raw/user_sessions.json"
+  processed_data_dir: "/usr/local/airflow/data/processed"
+
+# Configuration des DAGs
+dags:
+  etl_ecommerce:
+    schedule: "@daily"
+    max_active_runs: 1
+    catchup: false
+    tags: ["etl", "ecommerce"]
+  
+  data_quality:
+    schedule: "@daily"
+    max_active_runs: 1
+    catchup: false
+    tags: ["data-quality", "validation", "monitoring"]
+  
+  monitoring:
+    schedule: "@hourly"
+    max_active_runs: 1
+    catchup: false
+    tags: ["monitoring", "health-check", "alerting"]
+
+# Configuration des notifications
+notifications:
+  email: "beuleup2018@gmail.com"  # Surchargé par NOTIFICATION_EMAIL
+  on_failure: true
+  on_retry: false
+  on_success: false
+
+# Configuration des retry
+retry:
+  retries: 1
+  retry_delay_minutes: 5
+
+# Configuration des APIs
+apis:
+  fake_store:
+    base_url: "https://fakestoreapi.com"
+    timeout: 30
+    max_retries: 3
+
+# Configuration des logs
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

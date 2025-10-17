@@ -1,0 +1,38 @@
+# This file allows you to configure Airflow Connections, Pools, and Variables in a single place for local development only.
+# NOTE: json dicts can be added to the conn_extra field as yaml key value pairs. See the example below.
+
+# For more information, refer to our docs: https://www.astronomer.io/docs/astro/cli/develop-project#configure-airflow_settingsyaml-local-development-only
+# For questions, reach out to: https://support.astronomer.io
+# For issues create an issue ticket here: https://github.com/astronomer/astro-cli/issues
+
+airflow:
+  connections:
+    - conn_id: postgres_default
+      conn_type: postgres
+      conn_host: postgres
+      conn_schema: ecommerce_db
+      conn_login: postgres
+      conn_password: postgres
+      conn_port: 5432
+      conn_extra:
+        sslmode: prefer
+    - conn_id: fake_store_api
+      conn_type: http
+      conn_host: https://fakestoreapi.com
+      conn_extra:
+        timeout: 30
+        retry_delay: 5
+  pools:
+    - pool_name: etl_pool
+      pool_slot: 3
+      pool_description: Pool pour les tâches ETL
+    - pool_name: api_pool
+      pool_slot: 2
+      pool_description: Pool pour les appels API
+  variables:
+    - variable_name: etl_batch_size
+      variable_value: "1000"
+    - variable_name: etl_max_retries
+      variable_value: "3"
+    - variable_name: notification_email
+      variable_value: "beuleup2018@gmail.com"

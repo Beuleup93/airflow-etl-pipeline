@@ -1,0 +1,68 @@
+[
+  {
+    "session_id": "sess_001",
+    "customer_email": "john.doe@email.com",
+    "session_start": "2024-01-15T10:15:00",
+    "session_end": "2024-01-15T10:35:00",
+    "pages_viewed": 8,
+    "items_viewed": ["1", "5", "7", "10"],
+    "items_added_to_cart": ["1", "7"],
+    "conversion": true,
+    "device_type": "desktop",
+    "browser": "Chrome",
+    "ip_address": "192.168.1.100"
+  },
+  {
+    "session_id": "sess_002",
+    "customer_email": "jane.smith@email.com",
+    "session_start": "2024-01-15T11:30:00",
+    "session_end": "2024-01-15T11:50:00",
+    "pages_viewed": 12,
+    "items_viewed": ["5", "6", "8", "9", "10"],
+    "items_added_to_cart": ["5"],
+    "conversion": true,
+    "device_type": "mobile",
+    "browser": "Safari",
+    "ip_address": "192.168.1.101"
+  },
+  {
+    "session_id": "sess_003",
+    "customer_email": "bob.wilson@email.com",
+    "session_start": "2024-01-15T14:00:00",
+    "session_end": "2024-01-15T14:25:00",
+    "pages_viewed": 15,
+    "items_viewed": ["1", "2", "3", "4", "5"],
+    "items_added_to_cart": ["3"],
+    "conversion": true,
+    "device_type": "tablet",
+    "browser": "Firefox",
+    "ip_address": "192.168.1.102"
+  },
+  {
+    "session_id": "sess_004",
+    "customer_email": "alice.brown@email.com",
+    "session_start": "2024-01-16T12:45:00",
+    "session_end": "2024-01-16T13:10:00",
+    "pages_viewed": 6,
+    "items_viewed": ["2", "6"],
+    "items_added_to_cart": ["2", "6"],
+    "conversion": true,
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "ip_address": "192.168.1.103"
+  },
+  {
+    "session_id": "sess_005",
+    "customer_email": "charlie.davis@email.com",
+    "session_start": "2024-01-17T09:30:00",
+    "session_end": "2024-01-17T09:45:00",
+    "pages_viewed": 5,
+    "items_viewed": ["4", "7", "8"],
+    "items_added_to_cart": [],
+    "conversion": false,
+    "device_type": "desktop",
+    "browser": "Edge",
+    "ip_address": "192.168.1.104"
+  }
+]
+
