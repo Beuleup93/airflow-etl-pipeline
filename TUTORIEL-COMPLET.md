@@ -13,6 +13,16 @@
 9. [Concepts avancés](#concepts-avancés)
 10. [Troubleshooting](#troubleshooting)
 
+## Images du tutoriel
+
+Ce tutoriel inclut des captures d'écran pour illustrer les concepts :
+
+- **Interface Airflow** : Vues des DAGs, graphiques d'exécution, logs détaillés
+- **CI/CD** : Workflows GitHub Actions réussis
+- **Architecture** : Schémas des deux approches (Astro CLI vs Docker Compose)
+
+Les images sont organisées dans le dossier `images/` et montrent les interfaces réelles du projet en fonctionnement.
+
 ---
 
 ## 1. Vue d'ensemble du projet
@@ -123,7 +133,7 @@ Le projet suit une architecture en couches :
 
 ### Configuration centralisée
 
-Le projet utilise une approche de configuration hybride :
+Le projet utilise une configuration centralisée avec Astro CLI :
 
 #### config.yaml - Configuration générale
 ```yaml
@@ -145,30 +155,142 @@ dags:
     max_active_runs: 1
 ```
 
-#### .env - Variables sensibles
-```bash
-DB_HOST=postgres
-DB_USER=postgres
-DB_PASSWORD=postgres
-NOTIFICATION_EMAIL=beuleup2018@gmail.com
+#### Configuration Airflow (airflow_settings.yaml)
+```yaml
+airflow:
+  connections:
+    - conn_id: postgres_default
+      conn_type: postgres
+      conn_host: postgres
+      conn_schema: ecommerce_db
+      conn_login: postgres
+      conn_password: postgres
+      conn_port: 5432
+  variables:
+    - variable_name: notification_email
+      variable_value: "beuleup2018@gmail.com"
 ```
 
 ### Gestion des environnements
 
-**Développement local**
-- Docker Compose pour les services
-- Base de données PostgreSQL locale
-- Airflow en mode développement
+#### Architecture de développement (Astro CLI)
 
-**Production**
-- Docker Compose avec volumes persistants
-- Configuration de sécurité renforcée
-- Monitoring et alertes
+**Avantages :**
+- **Simplicité** : Un seul commande `astro dev start`
+- **Services automatiques** : PostgreSQL + Airflow fournis
+- **Configuration intégrée** : Pas besoin de Docker Compose
+- **Développement rapide** : Setup en quelques secondes
 
-### Variables d'environnement prioritaires
+**Architecture :**
+```
+Astro CLI Environment:
+├── PostgreSQL (service postgres:5432)
+│   ├── Métadonnées Airflow
+│   └── ecommerce_db (notre base)
+├── Airflow Scheduler
+├── Airflow API Server (port 8080)
+├── Airflow DAG Processor
+└── Airflow Triggerer
+```
 
-1. Variables d'environnement (.env)
-2. Configuration YAML (config.yaml)
+**Utilisation :**
+```bash
+# Démarrage
+astro dev start
+
+# Vérification
+astro dev ps
+
+# Arrêt
+astro dev stop
+```
+
+#### Architecture de production (Docker Compose)
+
+**Avantages :**
+- **Contrôle total** : Configuration personnalisée
+- **Scalabilité** : Services séparés et redimensionnables
+- **Monitoring** : pgAdmin, logs centralisés
+- **Sécurité** : Configuration de production
+
+**Architecture :**
+```
+Production Environment:
+├── PostgreSQL (service postgres:5432)
+│   ├── Métadonnées Airflow
+│   └── ecommerce_db
+├── pgAdmin (port 5050) - Administration DB
+├── Airflow Webserver (port 8080)
+├── Airflow Scheduler
+├── Airflow Worker (optionnel)
+└── Redis (optionnel) - Pour CeleryExecutor
+```
+
+**Utilisation :**
+```bash
+# Démarrage production
+docker-compose -f docker-compose.prod.yml up -d
+
+# Vérification
+docker-compose -f docker-compose.prod.yml ps
+
+# Arrêt
+docker-compose -f docker-compose.prod.yml down
+```
+
+#### Quand utiliser quoi ?
+
+**Développement :**
+- **Astro CLI** : Développement, tests, debug
+- **Configuration simple** : `config.yaml` + `airflow_settings.yaml`
+- **Services intégrés** : Pas de configuration Docker
+
+**Production :**
+- **Docker Compose** : Déploiement, production, monitoring
+- **Configuration avancée** : Services séparés, volumes persistants
+- **Monitoring complet** : pgAdmin, logs, alertes
+
+#### Comparaison des approches
+
+| Aspect | Développement (Astro CLI) | Production (Docker Compose) |
+|--------|---------------------------|------------------------------|
+| **Complexité** | Simple (1 commande) | Complexe (configuration multiple) |
+| **Services** | Intégrés automatiquement | Services séparés |
+| **Base de données** | PostgreSQL intégré | PostgreSQL + pgAdmin |
+| **Monitoring** | Interface Airflow uniquement | pgAdmin + logs centralisés |
+| **Scalabilité** | Limitée | Haute (services redimensionnables) |
+| **Sécurité** | Configuration de base | Configuration de production |
+| **Déploiement** | Local uniquement | Production + CI/CD |
+| **Maintenance** | Automatique | Manuelle (volumes, logs) |
+
+#### Cas d'usage recommandés
+
+**Utiliser Astro CLI pour :**
+- Développement de DAGs
+- Tests et debugging
+- Formation et apprentissage
+- Prototypage rapide
+
+**Utiliser Docker Compose pour :**
+- Déploiement en production
+- Environnements de staging
+- Démonstrations client
+- Intégration avec CI/CD
+
+### Configuration Astro CLI
+
+**Astro CLI fournit automatiquement :**
+- **Service PostgreSQL** : Nommé `postgres` sur le port 5432
+- **Credentials par défaut** : `postgres/postgres`
+- **Base de données** : `ecommerce_db` (créée par `init_db.sql`)
+- **Connexions Airflow** : Configurées dans `airflow_settings.yaml`
+- **Services Airflow** : Scheduler, API, DAG processor, Triggerer
+- **Interface web** : http://localhost:8080 (admin/admin)
+
+### Configuration prioritaire
+
+1. Configuration YAML (config.yaml)
+2. Configuration Airflow (airflow_settings.yaml)
 3. Valeurs par défaut (code)
 
 ---
@@ -596,6 +718,11 @@ def run_tests():
 
 #### Workflow CI (ci.yml)
 
+**Interface GitHub Actions - Workflow réussi :**
+![GitHub Actions - Workflow CI réussi](images/github-actions-ci-success.png)
+
+*Interface GitHub Actions montrant l'exécution réussie du workflow CI avec tous les jobs : Tests, Code Quality, Security Scan, Build Docker Image, et Notify Results.*
+
 **Job 1 : Tests**
 ```yaml
 test:
@@ -674,9 +801,32 @@ EXPOSE 8080
 CMD ["airflow", "webserver"]
 ```
 
-#### Docker Compose
+#### Fichiers Docker pour la production
+
+**Dockerfile** - Image personnalisée Airflow
+```dockerfile
+FROM apache/airflow:2.8.1-python3.11
+
+# Configuration des variables d'environnement
+ENV AIRFLOW_HOME=/opt/airflow
+ENV PYTHONPATH=/opt/airflow/include
+
+# Installation des dépendances
+COPY requirements.txt /opt/airflow/requirements.txt
+RUN pip install -r /opt/airflow/requirements.txt
+
+# Copie du code source
+COPY dags/ /opt/airflow/dags/
+COPY include/ /opt/airflow/include/
+COPY config.yaml /opt/airflow/config.yaml
+COPY airflow_settings.yaml /opt/airflow/airflow_settings.yaml
+
+EXPOSE 8080
+CMD ["airflow", "webserver"]
+```
+
+**docker-compose.prod.yml** - Orchestration production
 ```yaml
-version: '3.8'
 services:
   postgres:
     image: postgres:13
@@ -686,40 +836,56 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
 
-  airflow:
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+
+  airflow-webserver:
     build: .
+    command: webserver
+    ports:
+      - "8080:8080"
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@postgres:5432/ecommerce_db
     depends_on:
       - postgres
+
+  airflow-scheduler:
+    build: .
+    command: scheduler
     environment:
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql://postgres:postgres@postgres:5432/ecommerce_db
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - ./include:/opt/airflow/include
-      - ./data:/opt/airflow/data
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@postgres:5432/ecommerce_db
+    depends_on:
+      - postgres
 ```
 
 ### Déploiement
 
 #### Environnement de développement
 ```bash
-# Démarrage des services
-docker-compose up -d
+# Démarrage des services avec Astro CLI
+astro dev start
 
 # Initialisation de la base de données
-docker-compose exec postgres psql -U postgres -d ecommerce_db -f init_db.sql
+astro dev exec postgres psql -U postgres -d ecommerce_db -f init_db.sql
 
 # Vérification des services
-docker-compose ps
+astro dev ps
 ```
 
 #### Environnement de production
 ```bash
-# Build de l'image
+# Build de l'image Docker (pour déploiement)
 docker build -t airflow-etl:latest .
 
-# Déploiement avec docker-compose.prod.yml
-docker-compose -f docker-compose.prod.yml up -d
+# Déploiement avec Astro CLI
+astro deploy
 ```
 
 ---
@@ -729,7 +895,7 @@ docker-compose -f docker-compose.prod.yml up -d
 ### Démarrage du projet
 
 #### Prérequis
-- Docker et Docker Compose
+- Astro CLI installé
 - Git
 - Python 3.11 (pour les tests locaux)
 
@@ -739,17 +905,24 @@ docker-compose -f docker-compose.prod.yml up -d
 git clone https://github.com/Beuleup93/airflow-etl-pipeline.git
 cd airflow-etl-pipeline
 
-# Démarrage des services
-docker-compose up -d
+# Démarrage des services avec Astro CLI
+astro dev start
 
 # Vérification du statut
-docker-compose ps
+astro dev ps
 ```
 
 #### Accès aux interfaces
 - **Airflow UI** : http://localhost:8080
-- **pgAdmin** : http://localhost:5050
-- **Base de données** : localhost:5432
+- **Base de données PostgreSQL** : localhost:5432 (service `postgres`)
+- **Base de données** : `ecommerce_db` (créée par `init_db.sql`)
+
+#### Interface Airflow - Vue des DAGs
+Une fois Airflow démarré, vous accédez à l'interface web qui affiche tous les DAGs disponibles :
+
+![Interface Airflow - Liste des DAGs](images/airflow-dags-list.png)
+
+*Interface Airflow montrant les 3 DAGs du projet : `etl_ecommerce_pipeline`, `data_quality_checks`, et `monitoring_dag`, tous avec un statut de succès.*
 
 ### Exécution des DAGs
 
@@ -759,15 +932,35 @@ docker-compose ps
 3. Déclencher une exécution manuelle
 4. Surveiller l'exécution dans le graph view
 
+**Vue graphique du DAG ETL :**
+![DAG ETL E-commerce - Vue graphique](images/etl-ecommerce-dag-graph.png)
+
+*Vue graphique du DAG `etl_ecommerce_pipeline` montrant les 4 tâches séquentielles : `extract_data` → `transform_data` → `load_data` → `send_notification`, toutes avec un statut de succès.*
+
+**Détails d'exécution et code du DAG :**
+![DAG ETL E-commerce - Code et détails](images/etl-ecommerce-dag-code.png)
+
+*Interface Airflow montrant les détails d'exécution du DAG ETL et l'éditeur de code avec la syntaxe moderne `@dag` et `@task`.*
+
 #### DAG de qualité des données
 1. Activer le DAG `data_quality_dag`
 2. Programmer l'exécution quotidienne
 3. Consulter les rapports de qualité
 
+**Vue graphique du DAG de qualité :**
+![DAG Data Quality - Vue graphique](images/data-quality-dag-graph.png)
+
+*Vue graphique du DAG `data_quality_checks` montrant les tâches de vérification : `check_data_completeness`, `check_data_freshness`, `check_data_consistency`, et `generate_quality_report` avec leurs dépendances.*
+
 #### DAG de monitoring
 1. Activer le DAG `monitoring_dag`
 2. Configurer les alertes
 3. Surveiller les métriques
+
+**Vue graphique du DAG de monitoring :**
+![DAG Monitoring - Vue graphique et logs](images/monitoring-dag-graph-logs.png)
+
+*Vue graphique du DAG `monitoring_dag` montrant les tâches de surveillance : `check_system_metrics`, `check_dag_status`, `check_data_freshness`, `check_database_health`, et `generate_monitoring_report`. Les logs détaillés montrent l'exécution de la tâche `check_system_metrics` avec les métriques calculées.*
 
 ### Tests locaux
 
@@ -805,13 +998,13 @@ pytest --cov=include tests/
 #### Logs Airflow
 ```bash
 # Logs des tâches
-docker-compose logs airflow
+astro dev logs
 
 # Logs de la base de données
-docker-compose logs postgres
+astro dev logs postgres
 
 # Logs en temps réel
-docker-compose logs -f airflow
+astro dev logs -f
 ```
 
 #### Debugging des DAGs
@@ -894,13 +1087,13 @@ docker-compose logs -f airflow
 #### Erreurs de connexion
 ```bash
 # Vérification des services
-docker-compose ps
+astro dev ps
 
 # Test de connexion PostgreSQL
-docker-compose exec postgres psql -U postgres -d ecommerce_db -c "SELECT 1;"
+astro dev exec postgres psql -U postgres -d ecommerce_db -c "SELECT 1;"
 
 # Vérification des logs
-docker-compose logs postgres
+astro dev logs postgres
 ```
 
 #### Erreurs de DAGs

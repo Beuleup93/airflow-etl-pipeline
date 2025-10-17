@@ -1,8 +1,8 @@
-# 🚀 Projet 2 - Orchestration ETL avec Apache Airflow
+# Projet 2 - Orchestration ETL avec Apache Airflow
 
 Ce projet implémente l'orchestration du pipeline ETL e-commerce en utilisant Apache Airflow avec la syntaxe moderne.
 
-## 🎯 Objectifs
+## Objectifs
 
 - **Orchestration** : Automatiser l'exécution du pipeline ETL
 - **Monitoring** : Surveiller les performances et les erreurs
@@ -10,7 +10,7 @@ Ce projet implémente l'orchestration du pipeline ETL e-commerce en utilisant Ap
 - **Alerting** : Notifications en cas d'échec
 - **Data Quality** : Contrôles de qualité automatisés
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 airflow-etl/
@@ -24,19 +24,19 @@ airflow-etl/
 └── README.md                     # Documentation
 ```
 
-## 🛠️ Technologies
+## Technologies
 
-- **Apache Airflow 2.7+** : Orchestrateur de workflows
-- **Docker & Docker Compose** : Environnement de développement
-- **PostgreSQL** : Base de données
-- **Python** : Langage de programmation
+- **Apache Airflow 2.8.1** : Orchestrateur de workflows
 - **Astro CLI** : Outil de gestion Airflow moderne
+- **PostgreSQL** : Base de données (fournie par Astro CLI)
+- **Python 3.11** : Langage de programmation
+- **Docker** : Containerisation (pour la production)
 
-## 🚀 Installation et Démarrage
+## Installation et Démarrage
 
 ### Prérequis
-- Docker Desktop
 - Astro CLI installé
+- Git
 
 ### Étapes
 
@@ -57,38 +57,42 @@ airflow-etl/
    - Activer `data_quality_checks`
    - Activer `monitoring_dag`
 
-## 📊 DAGs Disponibles
+4. **Exécution des DAGs**
+   - **Exécution manuelle** : Cliquer sur "Trigger" pour lancer immédiatement
+   - **Exécution automatique** : Les DAGs s'exécutent selon leur schedule configuré
+   - **Monitoring** : Surveiller l'exécution dans l'interface Airflow
+
+## DAGs Disponibles
 
 ### 1. ETL E-commerce Pipeline (`etl_ecommerce_pipeline`)
-- **Fréquence** : Quotidienne
+- **Schedule** : `@daily` (quotidien)
 - **Tâches** :
-  - `extract_products` : Extraction API Fake Store
-  - `extract_orders` : Extraction CSV (simulation)
-  - `extract_sessions` : Extraction JSON (simulation)
+  - `extract_data` : Extraction des données (API, CSV, JSON)
   - `transform_data` : Transformation et nettoyage
   - `load_data` : Chargement PostgreSQL
   - `send_notification` : Notification de fin
-- **Dépendances** : Extraction en parallèle → Transformation → Chargement → Notification
+- **Dépendances** : Extraction → Transformation → Chargement → Notification
 
 ### 2. Data Quality Checks (`data_quality_checks`)
-- **Fréquence** : Quotidienne
+- **Schedule** : `@daily` (quotidien)
 - **Tâches** :
   - `check_data_completeness` : Vérification complétude
   - `check_data_consistency` : Vérification cohérence
-  - `check_data_quality` : Vérification qualité
+  - `check_data_freshness` : Vérification fraîcheur
   - `generate_quality_report` : Rapport de qualité
 - **Dépendances** : Vérifications en parallèle → Rapport
 
 ### 3. Monitoring (`monitoring_dag`)
-- **Fréquence** : Toutes les heures
+- **Schedule** : `@hourly` (toutes les heures)
 - **Tâches** :
+  - `check_system_metrics` : Métriques système
   - `check_dag_status` : Statut des DAGs
+  - `check_data_freshness` : Fraîcheur des données
   - `check_database_health` : Santé de la DB
-  - `check_system_resources` : Ressources système
-  - `send_health_report` : Rapport de santé
+  - `generate_monitoring_report` : Rapport de monitoring
 - **Dépendances** : Vérifications en parallèle → Rapport
 
-## 🔧 Fonctionnalités
+## Fonctionnalités
 
 ### Syntaxe Moderne Airflow 2.0+
 - **`@dag`** : Décorateur pour définir les DAGs
@@ -106,7 +110,7 @@ airflow-etl/
 - **Cohérence** : Vérification des relations entre tables
 - **Qualité** : Validation des formats et valeurs
 
-## 📚 Concepts Appris
+## Concepts Appris
 
 - **DAGs** : Directed Acyclic Graphs
 - **Tasks** : Unités de travail atomiques
@@ -116,7 +120,7 @@ airflow-etl/
 - **Data Quality** : Contrôles automatisés
 - **Syntaxe moderne** : `@dag` et `@task` decorators
 
-## 🧪 Tests
+## Tests
 
 ```bash
 # Tests des DAGs
@@ -126,7 +130,7 @@ python scripts/validate_dags.py
 pytest tests/
 ```
 
-## 🎓 Prochaines Étapes
+## Prochaines Étapes
 
 - **Projet 3** : AWS Cloud (S3, Glue, EMR)
 - **Projet 4** : Databricks et Spark
@@ -136,6 +140,6 @@ pytest tests/
 - **Projet 8** : Monitoring avec Grafana
 - **Projet 9** : Projet final intégré
 
-## 🤝 Support
+## Support
 
 Pour toute question ou problème, consultez la documentation Airflow ou ouvrez une issue.

@@ -22,7 +22,7 @@ USER airflow
 # Copie des fichiers de configuration
 COPY requirements.txt /opt/airflow/requirements.txt
 COPY config.yaml /opt/airflow/config.yaml
-COPY .env /opt/airflow/.env
+COPY airflow_settings.yaml /opt/airflow/airflow_settings.yaml
 
 # Installation des dépendances Python
 RUN pip install --no-cache-dir -r /opt/airflow/requirements.txt
@@ -32,6 +32,7 @@ COPY dags/ /opt/airflow/dags/
 COPY include/ /opt/airflow/include/
 COPY scripts/ /opt/airflow/scripts/
 COPY data/ /opt/airflow/data/
+COPY init_db.sql /opt/airflow/init_db.sql
 
 # Création des répertoires nécessaires
 RUN mkdir -p /opt/airflow/logs /opt/airflow/plugins

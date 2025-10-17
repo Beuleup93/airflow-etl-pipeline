@@ -8,6 +8,9 @@ build/
 develop-eggs/
 dist/
 downloads/
+
+# Images (ignorées pour éviter de versionner les captures d'écran)
+images/
 eggs/
 .eggs/
 lib/
