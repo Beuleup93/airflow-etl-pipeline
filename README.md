@@ -130,16 +130,6 @@ python scripts/validate_dags.py
 pytest tests/
 ```
 
-## Prochaines Étapes
-
-- **Projet 3** : AWS Cloud (S3, Glue, EMR)
-- **Projet 4** : Databricks et Spark
-- **Projet 5** : dbt et Snowflake
-- **Projet 6** : Data Governance
-- **Projet 7** : DevOps et DataOps
-- **Projet 8** : Monitoring avec Grafana
-- **Projet 9** : Projet final intégré
-
 ## Support
 
 Pour toute question ou problème, consultez la documentation Airflow ou ouvrez une issue.
