@@ -133,13 +133,13 @@ jobs:
 
     - name: Deploy to production
       run: |
-        echo "🚀 Déploiement en production..."
+        echo "Deploiement en production..."
         echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
         
         # Ici vous pouvez ajouter votre logique de déploiement
         # Par exemple : kubectl, docker-compose, etc.
         
-        echo "✅ Déploiement terminé avec succès"
+        echo "Deploiement termine avec succes"
 
     - name: Notify deployment
       uses: 8398a7/action-slack@v3
@@ -162,11 +162,11 @@ jobs:
     - name: Notify success
       if: needs.deploy.result == 'success'
       run: |
-        echo "✅ Pipeline CI/CD réussi !"
-        echo "🚀 Déploiement terminé avec succès"
+        echo "Pipeline CI/CD reussi !"
+        echo "Deploiement termine avec succes"
 
     - name: Notify failure
       if: needs.deploy.result == 'failure'
       run: |
-        echo "❌ Échec du déploiement"
-        echo "🔍 Vérifiez les logs pour plus de détails"
+        echo "Echec du deploiement"
+        echo "Verifiez les logs pour plus de details"
