@@ -4,7 +4,7 @@
 # Configuration de la base de données
 # Les valeurs sensibles sont surchargées par les variables d'environnement
 database:
-  host: "postgres"  # Surchargé par DB_HOST (nom du service Docker)
+  host: "postgres"  # Surchargé par DB_HOST (nom du service Docker) --> # Service PostgreSQL d'Astro
   port: 5432         # Surchargé par DB_PORT
   database: "ecommerce_db"  # Surchargé par DB_NAME
   user: "postgres"   # Surchargé par DB_USER
