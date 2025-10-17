@@ -25,7 +25,7 @@ class TestETLEcommerceDAG:
         # Vérifications
         assert dag.dag_id == 'etl_ecommerce_pipeline'
         assert dag.description == 'Pipeline ETL pour données e-commerce'
-        assert dag.schedule == '@daily'
+        assert dag.schedule_interval == '@daily'
         assert dag.catchup == False
         assert 'etl' in dag.tags
         assert 'ecommerce' in dag.tags
@@ -67,7 +67,7 @@ class TestDataQualityDAG:
         # Vérifications
         assert dag.dag_id == 'data_quality_checks'
         assert dag.description == 'Contrôles de qualité des données e-commerce'
-        assert dag.schedule == '@daily'
+        assert dag.schedule_interval == '@daily'
         assert dag.catchup == False
         assert 'data-quality' in dag.tags
         assert 'validation' in dag.tags
@@ -114,7 +114,7 @@ class TestMonitoringDAG:
         # Vérifications
         assert dag.dag_id == 'monitoring_dag'
         assert dag.description == 'Monitoring et surveillance du système'
-        assert dag.schedule == '@hourly'
+        assert dag.schedule_interval == '@hourly'
         assert dag.catchup == False
         assert 'monitoring' in dag.tags
         assert 'health-check' in dag.tags

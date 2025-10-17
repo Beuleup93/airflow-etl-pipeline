@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 class ConfigLoader:
     """Classe pour charger et gérer la configuration du projet"""
     
-    def __init__(self, config_path: str = None):
+    def __init__(self, config_path: str | None = None):
         """
         Initialise le chargeur de configuration
         
