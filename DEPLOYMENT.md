@@ -1,27 +1,38 @@
 # Guide de Déploiement - Airflow ETL Pipeline
 
-Ce guide explique comment déployer le projet Airflow ETL en utilisant GitHub Actions et Docker.
+Ce guide explique comment déployer le projet Airflow ETL en utilisant Astro CLI pour le développement et Docker Compose pour la production.
 
-## 🚀 **Déploiement Automatique**
+## Déploiement
 
-### **1. Déploiement via GitHub Actions**
+### 1. Développement avec Astro CLI
 
-Le déploiement se fait automatiquement via GitHub Actions :
+Le développement se fait avec Astro CLI qui fournit automatiquement PostgreSQL et Airflow :
 
-#### **Déclencheurs**
-- **Push sur `main`** : Déploiement en production
-- **Push sur `develop`** : Déploiement en staging
-- **Pull Request** : Tests et validation
-- **Workflow Dispatch** : Déploiement manuel
+#### Démarrage
+```bash
+astro dev start
+```
 
-#### **Étapes du déploiement**
-1. **Tests** : Tests unitaires, intégration, et validation des DAGs
-2. **Build** : Construction de l'image Docker
-3. **Déploiement** : Déploiement automatique
-4. **Vérification** : Tests de santé des services
-5. **Notification** : Notifications de succès/échec
+#### Services fournis automatiquement
+- PostgreSQL (service `postgres`)
+- Airflow Scheduler
+- Airflow API Server (port 8080)
+- Airflow DAG Processor
+- Airflow Triggerer
+### 2. Production avec Docker Compose
 
-### **2. Configuration des Secrets**
+Pour la production, utilisez Docker Compose avec les fichiers fournis :
+
+#### Démarrage production
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+#### Services de production
+- PostgreSQL avec pgAdmin
+- Airflow Webserver
+- Airflow Scheduler
+- Volumes persistants pour les données
 
 Avant le premier déploiement, configurez les secrets GitHub :
 

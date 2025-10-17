@@ -1,10 +1,10 @@
-# 📋 Configuration du Projet Airflow ETL
+# Configuration du Projet Airflow ETL
 
-## 🎯 **Approche de Configuration Centralisée**
+## Approche de Configuration Centralisée
 
-Ce projet utilise une approche de configuration centralisée avec un fichier YAML, ce qui est une **bonne pratique** en entreprise pour les projets Airflow.
+Ce projet utilise une approche de configuration centralisée avec un fichier YAML, ce qui est une bonne pratique en entreprise pour les projets Airflow.
 
-## 📁 **Structure de Configuration**
+## Structure de Configuration
 
 ```
 airflow-etl/
@@ -20,9 +20,9 @@ airflow-etl/
     └── monitoring_dag.py
 ```
 
-## 🔧 **Avantages de cette Approche**
+## Avantages de cette Approche
 
-### ✅ **Avantages :**
+### Avantages :
 - **Configuration centralisée** : Un seul fichier pour toute la config
 - **Facilité de maintenance** : Changements sans toucher au code
 - **Environnements multiples** : Dev, Staging, Prod
@@ -30,13 +30,13 @@ airflow-etl/
 - **Réutilisabilité** : Config partagée entre DAGs
 - **Versioning** : Configuration versionnée avec le code
 
-### 🏢 **Pratiques en Entreprise :**
+### Pratiques en Entreprise :
 - **Configuration par environnement** (dev/staging/prod)
 - **Variables sensibles** dans des secrets managers
 - **Validation** de la configuration au démarrage
 - **Documentation** des paramètres
 
-## 📝 **Utilisation dans les DAGs**
+## Utilisation dans les DAGs
 
 ```python
 from config_loader import config
