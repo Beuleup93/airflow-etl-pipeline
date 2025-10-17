@@ -131,7 +131,7 @@ AIRFLOW_ENV=production
 docker-compose logs airflow-webserver
 docker-compose logs airflow-scheduler
 
-# Logs en temps réel
+# Logs en temps réel 
 docker-compose logs -f airflow-webserver
 ```
 

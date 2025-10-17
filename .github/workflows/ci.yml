@@ -58,27 +58,40 @@ jobs:
     - name: Run unit tests
       run: |
         source venv/bin/activate
-        python -m pytest tests/unit/ -v --tb=short
+        python -m pytest tests/unit/ -v --tb=short --junitxml=test-results/unit-tests.xml
 
     - name: Run integration tests
       run: |
         source venv/bin/activate
-        python -m pytest tests/integration/ -v --tb=short
+        python -m pytest tests/integration/ -v --tb=short --junitxml=test-results/integration-tests.xml
 
     - name: Run DAG tests
       run: |
         source venv/bin/activate
-        python -m pytest tests/unit/test_dags.py -v --tb=short
+        python -m pytest tests/unit/test_dags.py -v --tb=short --junitxml=test-results/dag-tests.xml
 
     - name: Validate DAGs
       run: |
         source venv/bin/activate
         python scripts/validate_dags.py
 
+    - name: Create test results directory
+      run: |
+        mkdir -p test-results
+
     - name: Run all tests with coverage
       run: |
         source venv/bin/activate
-        python -m pytest tests/ --cov=include --cov-report=xml --cov-report=html
+        python -m pytest tests/ --cov=include --cov-report=xml --cov-report=html --junitxml=test-results/all-tests.xml
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: |
+          test-results/
+          coverage.xml
+          htmlcov/
 
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
