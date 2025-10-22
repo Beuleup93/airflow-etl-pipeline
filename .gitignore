@@ -141,3 +141,5 @@ test-results/
 coverage-reports/
 bandit-report.json
 safety-report.jsonTUTORIEL-COMPLET.md
+CONFIGURATION.md
+DEPLOYMENT.md
